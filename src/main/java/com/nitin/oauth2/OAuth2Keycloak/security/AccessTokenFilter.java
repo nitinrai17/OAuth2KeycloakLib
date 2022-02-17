@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AnyRequestMatcher;
 
+import com.nitin.oauth2.OAuth2Keycloak.exception.CustomInvalidTokenException;
 import com.nitin.oauth2.OAuth2Keycloak.exception.InvalidTokenException;
 import com.nitin.oauth2.OAuth2Keycloak.validator.JwtTokenValidator;
 
@@ -43,7 +44,12 @@ public class AccessTokenFilter extends AbstractAuthenticationProcessingFilter{
 
 		String authorizationHeader = extractAuthorizationHeaderAsString(request);
 		log.debug(" authorizationHeader= "+authorizationHeader );
-		AccessToken accessToken = tokenValidator.validateAuthorizationHeader(authorizationHeader);
+		AccessToken accessToken;
+		try {
+			accessToken = tokenValidator.validateAuthorizationHeader(authorizationHeader);
+		} catch (CustomInvalidTokenException e) {
+			throw new InvalidTokenException(e.getMessage());
+		}
 		log.debug("accessToken ="+accessToken);
 		return this.getAuthenticationManager().authenticate(new JwtAuthentication(accessToken));
 	}

@@ -11,6 +11,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.nitin.oauth2.OAuth2Keycloak.exception.CustomInvalidTokenException;
+import com.nitin.oauth2.OAuth2Keycloak.exception.InvalidTokenException;
 import com.nitin.oauth2.OAuth2Keycloak.security.utils.SecurityUtils;
 
 
@@ -41,8 +43,12 @@ public class AccessToken {
 	}
 
 	private JsonObject getPayloadAsJsonObject() {
-		DecodedJWT decodedJWT = SecurityUtils.decodeToken(value);
-		return SecurityUtils.decodeTokenPayloadToJsonObject(decodedJWT);
+		try {
+			DecodedJWT decodedJWT = SecurityUtils.decodeToken(value);
+			return SecurityUtils.decodeTokenPayloadToJsonObject(decodedJWT);
+		} catch (CustomInvalidTokenException e) {
+			throw new InvalidTokenException(e.getMessage());
+		}
 	}
 
 }

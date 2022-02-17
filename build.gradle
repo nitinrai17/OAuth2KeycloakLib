@@ -26,6 +26,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	implementation 'com.auth0:java-jwt:3.11.0'
 	implementation 'com.auth0:jwks-rsa:0.15.0'
+	implementation 'com.nitin.oauth2.lib:OAuth2KeycloakValidateLib:0.0.1-SNAPSHOT'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.zalando:logbook-spring-boot-starter:2.4.1'
